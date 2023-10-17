@@ -32,7 +32,7 @@ function App() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           let cord=`${position.coords.latitude},${position.coords.longitude}`
-          await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}%20&q=${cord}&days=7`)
+          await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}%20&q=${cord}&days=7`)
           .then(res=>{
             setData(res)
             setLoaded(true)
@@ -53,14 +53,14 @@ function App() {
     
     const handleEnterKeyPress =async (e) => {
       if (e.key === 'Enter') {
-        await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}%20&q=${query}&days=7`)
+        await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}%20&q=${query}&days=7`)
         .then(res=>{
           setData(res)
           setLoaded(true)
           setError('')
         })
         .catch(err=>{
-          console.log('dddd',err.response.data.error.message);
+          console.log('dddd',err);
           setError(err.response.data.error.message)
         })
       }
