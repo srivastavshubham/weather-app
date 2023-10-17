@@ -18,13 +18,12 @@ function App() {
             console.log('granted');
           } else if (result.state === "prompt") {
             requestUserLocation();
-            console.log('prompt');
           } else if (result.state === "denied") {
             console.log('error');
           }
         });
       } else {
-        console.log('errorooo');
+        console.log('error');
       }
     }, [])
 
@@ -53,6 +52,10 @@ function App() {
     
     const handleEnterKeyPress =async (e) => {
       if (e.key === 'Enter') {
+        if(query == ''){
+          setError('Please enter the place!')
+          setLoaded(false)
+        }else{
         await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}%20&q=${query}&days=7`)
         .then(res=>{
           setData(res)
@@ -60,9 +63,11 @@ function App() {
           setError('')
         })
         .catch(err=>{
-          console.log('dddd',err);
+          console.log('dddd',err.response.data.error.message);
           setError(err.response.data.error.message)
+          setLoaded(false)
         })
+      }
       }
     }
 
@@ -88,11 +93,11 @@ function App() {
           {loaded && weatherData.data.forecast.forecastday.map((x,i)=>{
           return(
           <div style={{display:'flex'}} key={i}>
-              <div style={{padding:'20px 10px 0px 0px',width:'100px'}}>{new Date(x.date).toLocaleString('en-US', { weekday: 'long' })}</div>
-              <div style={{padding:'20px 10px 0px 0px',width:'80px'}}>{x.day.condition.text}</div>
+              <div className='forecast_date'>{new Date(x.date).toLocaleString('en-US', { weekday: 'long' })}</div>
+              <div className='forecast_type'>{x.day.condition.text}</div>
               <img src={x.day.condition.icon}/>
-              <div style={{padding:'20px 10px 0px 0px',width:'100px'}}>{x.day.maxtemp_c}&deg; / {x.day.mintemp_c}&deg;</div>
-              <div style={{padding:'20px 10px 0px 0px',width:'150px'}}>{x.astro.sunrise} / {x.astro.sunset}</div>
+              <div className='forecast_date'>{x.day.maxtemp_c}&deg; / {x.day.mintemp_c}&deg;</div>
+              <div className='forecast_time'>{x.astro.sunrise} / {x.astro.sunset}</div>
           </div>
           )})}
         </div>
